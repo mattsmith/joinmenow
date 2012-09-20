@@ -1,5 +1,39 @@
 <h1>Listing events</h1>
 
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '370884386324798', // App ID
+      channelUrl : '//www.joinmenow.co/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    FB.Event.subscribe('auth.statusChange', handleStatusChange);
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+
+    function search_events() {
+        FB.api('/search?q=conference&type=event', function(response) {
+            alert(response);
+        });
+    }
+</script>
+
+<button onclick="search_events();">
+    search events
+</button>
+
 <table>
   <tr>
     <th></th>
@@ -19,3 +53,48 @@
 <br />
 
 <%= link_to 'New Event', new_event_path %>
+
+<div id="map_canvas" stye="width:100%;height:300px;">
+</div>
+
+<script>
+function create_map(map_div, lat, lng, zoom) {
+	var map = new google.maps.Map(map_div, {
+		center: new google.maps.LatLng(lat || JMN.DEFAULTS.latitude, lng || JMN.DEFAULTS.longitude),
+		zoom: zoom || JMN.DEFAULTS.zoom,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		disableDefaultUI: false,
+		streetViewControl: false,
+		panControl: false,
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.SMALL
+		},
+		overviewMapControl: false,
+		mapTypeControl: true,
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+		}
+	});
+	return map;
+};
+
+$(document).ready(function () {
+    MAP = init($('#map_canvas')[0]);
+    var coords = null;
+    JMN.geolocate()
+        .done(function(location) {
+            $.log("succesfully geolocated: ", location);
+            coords = location.coords;   // if got Geolocation, then overwrite coords
+            var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
+            MAP.setCenter(latlng);
+        }).fail(function(msg) {
+            $.log("geolocation failed!", msg);
+        }).always(function() {
+            $.log("geolocation always!");
+        });
+
+});
+
+</script>
+
