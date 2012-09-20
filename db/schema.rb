@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120920221414) do
+ActiveRecord::Schema.define(:version => 20120920224341) do
 
   create_table "events", :force => true do |t|
     t.string   "fb_id"
@@ -41,6 +41,9 @@ ActiveRecord::Schema.define(:version => 20120920221414) do
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
+    t.string   "token"
+    t.string   "lat"
+    t.string   "lon"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
