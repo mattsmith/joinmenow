@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120920215938) do
+ActiveRecord::Schema.define(:version => 20120920225636) do
 
   create_table "events", :force => true do |t|
     t.string   "fb_id"
@@ -23,6 +23,20 @@ ActiveRecord::Schema.define(:version => 20120920215938) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "interests_events", :force => true do |t|
+    t.integer  "interest_id"
+    t.integer  "event_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "interests_users", :force => true do |t|
+    t.integer  "interest_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -40,6 +54,10 @@ ActiveRecord::Schema.define(:version => 20120920215938) do
     t.datetime "updated_at",                             :null => false
     t.string   "provider"
     t.string   "uid"
+    t.string   "name"
+    t.string   "token"
+    t.string   "lat"
+    t.string   "lon"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

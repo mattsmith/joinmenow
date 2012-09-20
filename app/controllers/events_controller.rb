@@ -4,6 +4,9 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
+    @graph = Koala::Facebook::GraphAPI.new(current_user.token)
+    @profile = @graph.get_object("me")
+    @location = @graph.get_object(@profile["location"]["id"])
     @events = Event.all
 
     respond_to do |format|

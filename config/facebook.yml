@@ -1,6 +1,6 @@
 development:
-  app_id:     "370884386324798"
-  secret_key: "fb88610cd0a19a2299faa62ed18c0733"
+  app_id:     "530963916920448"
+  secret_key: "e46a99fbb5044a70a605ae260065aeb1"
 production:
   app_id:     "370884386324798"
   secret_key: "fb88610cd0a19a2299faa62ed18c0733"
