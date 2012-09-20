@@ -1,0 +1,7 @@
+development:
+  app_id:     "370884386324798"
+  secret_key: "fb88610cd0a19a2299faa62ed18c0733"
+production:
+  app_id:     "370884386324798"
+  secret_key: "fb88610cd0a19a2299faa62ed18c0733"
+  
