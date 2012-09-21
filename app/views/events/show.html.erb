@@ -1,5 +1,99 @@
-<p id="notice"><%= notice %></p>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="#"><img src="/assets/img/logo.png" width="190" height="50"></a>
+        <div class="nav-collapse collapse">
+          <!--<ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            
+          </ul>-->
+          <form class="navbar-form pull-right">
+          Your location: Vancouver
+          </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
 
 
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
+  <div class="container">
+
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <div class="row">
+      <div class="span10">
+        <h2>Hi name!</h2>
+        <p>What sports are you interested in? Start typing to add interests! </p> 
+
+<p><form class="navbar-form">
+<input type="text" class="span4"></form></p>
+
+<h2>Your Interests</h2>
+        <p><span class="label label-info">sport 1</span> <span class="label label-info">sport 2</span> <span class="label label-info">sport 3</span></p>
+        </div>
+
+      
+      <div class="span10">
+      
+        <p>Start by creating an event you want to do now or join an event near you.</p>
+         <p><a class="btn btn-primary btn-large">Create an event! &raquo;</a></p>
+     </div>
+      <div class="span10">
+        <h3>Todays' events near you</h3>
+       
+              <p><a href="#" class="thumbnail">
+                <img src="http://placehold.it/780x300" alt="">
+              </a></p>
+            
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Sport</th>
+                <th>When</th>
+                <th>Where</th>
+                <th>Host</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Basketball</td>
+                <td>2pm</td>
+                <td>Riley Park</td>
+                <td>Roger Chen</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Soccer</td>
+                <td>6:30pm</td>
+                <td>Holland Park</td>
+                <td>Matt White</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Badminton</td>
+                <td>10pm</td>
+                <td>Richmond Q1</td>
+                <td>Annie Shen</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
+  
+
+    <hr>
+
+    <footer>
+      <p>&copy; JoinMeNow 2012</p>
+    </footer>
+
+  </div> <!-- /container -->
