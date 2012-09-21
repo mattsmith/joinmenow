@@ -231,6 +231,6 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = "/my_engine/users/auth"
 
   fb = YAML.load_file(Rails.root.join("config/facebook.yml"))[Rails.env]
-  config.omniauth :facebook, fb['app_id'], fb['secret_key'], { scope: "email,offline_access,share_item,status_update,publish_actions", iframe: true }
+  config.omniauth :facebook, fb['app_id'], fb['secret_key'], { scope: "email,offline_access,share_item,status_update,publish_actions,create_event", iframe: true }
 
 end

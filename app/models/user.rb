@@ -23,9 +23,7 @@ class User < ActiveRecord::Base
                            uid:auth.uid,
                            email:auth.info.email,
                            password:Devise.friendly_token[0,20],
-                           token: auth.credentials.token,
-                           lat: location['lat'], if location
-                           lon: location['lon'] if location
+                           token: auth.credentials.token
                            )
     end
     user
