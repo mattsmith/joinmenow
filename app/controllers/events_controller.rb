@@ -29,7 +29,7 @@ class EventsController < ApplicationController
   # GET /events/1.json
   def show
     @event = Event.find(params[:id])
-    @event.add_user(current_user)
+    # @event.add_user(current_user)
 
     redirect_to events_path, notice: "You're signed up for the event and ready to go."
   end
