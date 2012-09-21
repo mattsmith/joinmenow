@@ -14,6 +14,30 @@ JMN.DEFAULTS = {
 //    max_geo_tries : 2,  // maximum number of times to try watchPosition calls before failure
 }
 
+JMN.distance_between_points = function(p1, p2) {
+  if (!p1 || !p2) {
+    return 0;
+  }
+  var R = 6371000; // Radius of the Earth in meters
+  var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
+  var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d;
+};
+
+JMN.create_marker_bounds = function(markers) {
+    var bounds = new google.maps.LatLngBounds();
+    for(var i in markers) {
+        bounds.extend(markers[i].getPosition());
+    }
+    return bounds;
+}
+
+
 JMN.geolocate = function(max_radius, options) {
     // geolocate uses the HTML5 watchPosition method (more accurate than getCurrentPosition)
     // to determine location.  It will keep trying to get an accurate location, until

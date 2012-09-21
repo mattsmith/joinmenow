@@ -35,6 +35,9 @@
 <button onclick="search_events();">
     search events
 </button>
+<button onclick="join();">
+    join event
+</button>
 
 <table>
   <tr>
@@ -62,6 +65,7 @@
 <script>
 MAP = null;
 EVENT_MARKER = null;
+USER_MARKER = null;
 EVENT_MARKERS = [];
 
 function create_map(map_div, lat, lng, zoom) {
@@ -87,26 +91,36 @@ function create_map(map_div, lat, lng, zoom) {
 	return map;
 }
 
-function create_circle_NOT_USED(map, point, radius) {
-    var circle_opts = {
-        map: map,
-        center: point,
-        strokeColor: JMN.DEFAULTS.circle_colour,
-        strokeWeight: 2,
-        fillColor: JMN.DEFAULTS.circle_colour,
-        fillOpacity: 0.25,
-        radius: radius,
-    };
-    return new google.maps.Circle(circle_opts);
-}
-
 function search_events() {
-    var params = {lat:MAP.getCenter().lat(), lng:MAP.getCenter().lng(), radius:5000}
+    var params = {lat:MAP.getCenter().lat(), lon:MAP.getCenter().lng(), radius:5000}
     return $.getJSON("/events/search", params)
-        .done(function(response) {
-            _.each(response.data, function(val,i) {
+        .done(function(data) {
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(USER_MARKER.getPosition());
 
+            _.each(data, function(val,i) {
+                var pos = new google.maps.LatLng(val.lat, val.lon);
+                var marker = new google.maps.Marker({
+                    map: MAP,
+                    icon: new google.maps.MarkerImage("/assets/blue_markers_small/"+ (i+1)),
+                    position: pos,
+                    title: val.name,
+                });
+                var infowindow = new google.maps.InfoWindow(
+                { content: "<h4>"+val.name+"</h4><p>"+val.description+"</p><p>start time: "+val.start_time+"<br/>end time: "+val.end_time+"</p>",
+                    size: new google.maps.Size(50,50),
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                   infowindow.open(MAP, marker);
+                });
+
+
+                EVENT_MARKERS.push(marker);
+                bounds.extend(pos);
             });
+
+            MAP.fitBounds(bounds);
+
         }).fail(function(response) {
             console.log("ERROR: search failed: params = ", params, " response = ", response);
         })
@@ -118,25 +132,6 @@ function init() {
 	var zoom = 12;
 
     MAP = create_map($("#map_canvas")[0], lat, lng, zoom);
-
-    // Position the Event
-    google.maps.event.addListener(MAP, 'dblclick', function(event) {
-        var pos = event.latLng;
-        MAP.setCenter(pos);
-        if(EVENT_MARKER) {
-            EVENT_MARKER.setMap();
-            delete EVENT_MARKER;
-        }
-    	EVENT_MARKER = new google.maps.Marker({
-    	    map: MAP,
-            icon: new google.maps.MarkerImage("/assets/1.png"),
-            position: pos,
-//            draggable: true,
-    	});
-    	$('#event_lat').val(pos.lat());
-    	$('#event_lon').val(pos.lng());
-    });
-
 
     var coords = null;
     JMN.geolocate()
@@ -157,10 +152,10 @@ function init() {
                 radius: coords.accuracy,
                 editable: true,
             };
-            var marker = JMN.add_circle_marker(MAP, marker_opts, circle_opts);
+            USER_MARKER = JMN.add_circle_marker(MAP, marker_opts, circle_opts);
 
 //            var circle = create_circle_marker(MAP, latlng, coords.accuracy);
-            MAP.fitBounds(marker.getBounds());
+            MAP.fitBounds(USER_MARKER.getBounds());
             MAP.setZoom(MAP.getZoom() - 2);
         }).fail(function(msg) {
             console.log("geolocation failed!", msg);
