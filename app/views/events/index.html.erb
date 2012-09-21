@@ -30,12 +30,6 @@
      js.src = "//connect.facebook.net/en_US/all.js";
      ref.parentNode.insertBefore(js, ref);
    }(document));
-
-    function search_events() {
-        FB.api('/search?q=conference&type=event', function(response) {
-            alert(JSON.stringify(response));
-        });
-    }
 </script>
 
 <button onclick="search_events();">
@@ -66,6 +60,10 @@
 </div>
 
 <script>
+MAP = null;
+EVENT_MARKER = null;
+EVENT_MARKERS = [];
+
 function create_map(map_div, lat, lng, zoom) {
     var center = new google.maps.LatLng(lat || JMN.DEFAULTS.latitude, lng || JMN.DEFAULTS.longitude);
 	var map = new google.maps.Map(map_div, {
@@ -102,12 +100,22 @@ function create_circle_NOT_USED(map, point, radius) {
     return new google.maps.Circle(circle_opts);
 }
 
+function search_events() {
+    var params = {lat:MAP.getCenter().lat(), lng:MAP.getCenter().lng(), radius:5000}
+    return $.getJSON("/events/search", params)
+        .done(function(response) {
+            _.each(response.data, function(val,i) {
+
+            });
+        }).fail(function(response) {
+            console.log("ERROR: search failed: params = ", params, " response = ", response);
+        })
+}
+
 function init() {
 	var lat = 49.2825646098;    // Downtown Vancouver
 	var lng = -123.1181656402; // Downtown Vancouver
 	var zoom = 12;
-	MAP = null;
-	EVENT_MARKER = null;
 
     MAP = create_map($("#map_canvas")[0], lat, lng, zoom);
 
