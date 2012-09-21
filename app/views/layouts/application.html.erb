@@ -9,11 +9,20 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <style type="text/css">
     body {
       padding-top: 60px;
       padding-bottom: 40px;
+    }
+    #map_canvas {
+      clear: both;
+      max-width: 100%!important;
+      height: 460px!important;
+      border: 8px solid #fff;
+      box-shadow: 0 0 8px 0 #d3d4d8;
+      -moz-box-shadow: 0 0 8px 0 #d3d4d8;
+      -webkit-box-shadow: 0 0 8px 0 #d3d4d8;
     }
   </style>
 	<link rel="shortcut icon" href="assets/ico/favicon.ico">

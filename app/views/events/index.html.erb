@@ -31,6 +31,14 @@
     FB.Event.subscribe('auth.statusChange', handleStatusChange);
   };
 
+   function handleStatusChange(response) {
+     document.body.className = response.authResponse ? 'connected' : 'not_connected';
+
+     if (response.authResponse) {
+       console.log(response);
+     }
+   }
+
   // Load the SDK Asynchronously
   (function(d){
      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -42,7 +50,7 @@
 
     function search_events() {
         FB.api('/search?q=conference&type=event', function(response) {
-            alert(response);
+            alert(JSON.stringify(response));
         });
     }
 </script>
@@ -71,16 +79,16 @@
 
 <%= link_to 'New Event', new_event_path %>
 
-<<<<<<< HEAD
-<div id="map_canvas" stye="width:100%;height:300px;">
+<div id="map_canvas" style="width:400px;height:300px;">
 </div>
 
 <script>
 function create_map(map_div, lat, lng, zoom) {
+    var center = new google.maps.LatLng(lat || JMN.DEFAULTS.latitude, lng || JMN.DEFAULTS.longitude);
 	var map = new google.maps.Map(map_div, {
-		center: new google.maps.LatLng(lat || JMN.DEFAULTS.latitude, lng || JMN.DEFAULTS.longitude),
+		center: center,
 		zoom: zoom || JMN.DEFAULTS.zoom,
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
 		disableDefaultUI: false,
 		streetViewControl: false,
 		panControl: false,
@@ -89,29 +97,68 @@ function create_map(map_div, lat, lng, zoom) {
 			style: google.maps.ZoomControlStyle.SMALL
 		},
 		overviewMapControl: false,
-		mapTypeControl: true,
+		mapTypeControl: false,
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
 		}
 	});
 	return map;
-};
+}
 
-$(document).ready(function () {
-    MAP = init($('#map_canvas')[0]);
+function create_circle(map, point, radius) {
+    var circle_opts = {
+        map: map,
+        center: point,
+        strokeColor: JMN.DEFAULTS.circle_colour,
+        strokeWeight: 2,
+        fillColor: JMN.DEFAULTS.circle_colour,
+        fillOpacity: 0.25,
+        radius: radius,
+    };
+    return new google.maps.Circle(circle_opts);
+}
+
+function init() {
+	var lat = 49.2825646098;    // Downtown Vancouver
+	var lng = -123.1181656402; // Downtown Vancouver
+	var zoom = 12;
+
+//    MAP = create_map(document.getElementById("map_canvas"), lat,lng,zoom);// TODO: fill with dynamic data
+    MAP = create_map($("#map_canvas")[0], lat, lng, zoom);
     var coords = null;
+    console.log("created map!");
+
+    console.log("created map!");
+
     JMN.geolocate()
         .done(function(location) {
-            $.log("succesfully geolocated: ", location);
+            console.log("succesfully geolocated: ", location);
             coords = location.coords;   // if got Geolocation, then overwrite coords
             var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
             MAP.setCenter(latlng);
-        }).fail(function(msg) {
-            $.log("geolocation failed!", msg);
-        }).always(function() {
-            $.log("geolocation always!");
-        });
 
-});
+            // create circle:
+            var marker_opts = {
+                icon: new google.maps.MarkerImage("/assets/blank_marker.png"),
+                position: latlng,
+                draggable: true,
+            };
+            var circle_opts = {
+                center: latlng,
+                radius: coords.accuracy,
+                editable: true,
+            };
+            var marker = JMN.add_circle_marker(MAP, marker_opts, circle_opts);
+
+//            var circle = create_circle_marker(MAP, latlng, coords.accuracy);
+            MAP.fitBounds(marker.getBounds());
+        }).fail(function(msg) {
+            console.log("geolocation failed!", msg);
+        }).always(function() {
+            console.log("geolocation always!");
+        });
+}
+
+$(document).ready(init);
 
 </script>
