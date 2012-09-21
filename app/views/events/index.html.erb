@@ -4,9 +4,9 @@
   <%= f.label :description %>
   <%= f.text_field :description %>
   <%= f.label :start_time %>
-  <%= f.date_select :start_time %>
+  <%= f.datetime_select :start_time %>
   <%= f.label :end_time %>
-  <%= f.date_select :end_time %>
+  <%= f.datetime_select :end_time, default: 3.hours.from_now %>
   <%= f.submit "Create your Event!" %>
 <% end %>
 
