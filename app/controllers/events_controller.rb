@@ -29,11 +29,9 @@ class EventsController < ApplicationController
   # GET /events/1.json
   def show
     @event = Event.find(params[:id])
+    @event.add_user(current_user)
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @event }
-    end
+    redirect_to events_path, notice: "You're signed up for the event and ready to go."
   end
 
   # GET /events/new
