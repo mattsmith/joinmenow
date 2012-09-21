@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  attr_accessible :fb_id, :name, :description, :start_time, :end_time
+  attr_accessible :fb_id, :name, :description, :start_time, :end_time, :lat, :lon
   belongs_to :user
 
   after_create :create_facebook_event
@@ -22,6 +22,7 @@ class Event < ActiveRecord::Base
   end
 
   def location_id
+    # graph_api.get_connections('search?type=place&center=37.76,-122.427&distance=1000')
     # TODO...
     # graph_api
   end
