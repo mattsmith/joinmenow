@@ -5,7 +5,6 @@ class Event < ActiveRecord::Base
   after_create :create_facebook_event
 
   def create_facebook_event
-    graph = Koala::Facebook::GraphAPI.new(self.user.token)
     # picture = Koala::UploadableIO.new(File.open("PATH TO YOUR EVENT IMAGE"))
 
     # picture is not required
@@ -14,10 +13,20 @@ class Event < ActiveRecord::Base
         :name => self.name,
         :description => self.name,
         :start_time => self.start_time,
-        :end_time => self.end_time
+        :end_time => self.end_time,
+        :location_id => location_id
     }
 
-    event = graph.put_object('me', 'events', params )
+    event = graph_api.put_object('me', 'events', params )
     self.update_column(:fb_id, event['id'])
+  end
+
+  def location_id
+    # TODO...
+    # graph_api
+  end
+
+  def graph_api
+    @graph||= Koala::Facebook::GraphAPI.new(self.user.token)
   end
 end

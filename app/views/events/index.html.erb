@@ -7,6 +7,10 @@
   <%= f.datetime_select :start_time %>
   <%= f.label :end_time %>
   <%= f.datetime_select :end_time, default: 3.hours.from_now %>
+  <%= f.label :lat %>
+  <%= f.text_field :lat %>
+  <%= f.label :lon %>
+  <%= f.text_field :lon %>
   <%= f.submit "Create your Event!" %>
 <% end %>
 
@@ -140,8 +144,8 @@ function init() {
             position: pos,
 //            draggable: true,
     	});
-    	$('#latitude').val(pos.lat());
-    	$('#longitude').val(pos.lng());
+    	$('#event_lat').val(pos.lat());
+    	$('#event_lon').val(pos.lng());
     });
 
 

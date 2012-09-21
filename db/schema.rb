@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120920233927) do
+ActiveRecord::Schema.define(:version => 20120921004745) do
 
   create_table "events", :force => true do |t|
     t.string   "fb_id"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(:version => 20120920233927) do
     t.string   "description"
     t.datetime "start_time"
     t.datetime "end_time"
+    t.string   "lat"
+    t.string   "lon"
   end
 
   create_table "interests", :force => true do |t|

@@ -3,3 +3,92 @@
 <%= render 'form' %>
 
 <%= link_to 'Back', events_path %>
+
+<div id="map_canvas" style="width:400px;height:300px;">
+</div>
+
+<script>
+function create_map(map_div, lat, lng, zoom) {
+    var center = new google.maps.LatLng(lat || JMN.DEFAULTS.latitude, lng || JMN.DEFAULTS.longitude);
+	var map = new google.maps.Map(map_div, {
+		center: center,
+		zoom: zoom || JMN.DEFAULTS.zoom,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+		disableDefaultUI: false,
+		streetViewControl: false,
+		panControl: false,
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.SMALL
+		},
+		overviewMapControl: false,
+		mapTypeControl: false,
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+		},
+        disableDoubleClickZoom: true,
+	});
+	return map;
+}
+function init() {
+	var lat = 49.2825646098;    // Downtown Vancouver
+	var lng = -123.1181656402; // Downtown Vancouver
+	var zoom = 12;
+	MAP = null;
+	EVENT_MARKER = null;
+
+    MAP = create_map($("#map_canvas")[0], lat, lng, zoom);
+
+    // Position the Event
+    google.maps.event.addListener(MAP, 'dblclick', function(event) {
+        var pos = event.latLng;
+        MAP.setCenter(pos);
+        if(EVENT_MARKER) {
+            EVENT_MARKER.setMap();
+            delete EVENT_MARKER;
+        }
+    	EVENT_MARKER = new google.maps.Marker({
+    	    map: MAP,
+            icon: new google.maps.MarkerImage("/assets/1.png"),
+            position: pos,
+//            draggable: true,
+    	});
+    	$('#event_lat').val(pos.lat());
+    	$('#event_lon').val(pos.lng());
+    });
+
+
+    var coords = null;
+    JMN.geolocate()
+        .done(function(location) {
+            console.log("succesfully geolocated: ", location);
+            coords = location.coords;   // if got Geolocation, then overwrite coords
+            var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
+            MAP.setCenter(latlng);
+
+            // create circle:
+            var marker_opts = {
+                icon: new google.maps.MarkerImage("/assets/blank_marker.png"),
+                position: latlng,
+                draggable: true,
+            };
+            var circle_opts = {
+                center: latlng,
+                radius: coords.accuracy,
+                editable: true,
+            };
+            var marker = JMN.add_circle_marker(MAP, marker_opts, circle_opts);
+
+//            var circle = create_circle_marker(MAP, latlng, coords.accuracy);
+            MAP.fitBounds(marker.getBounds());
+            MAP.setZoom(MAP.getZoom() - 2);
+        }).fail(function(msg) {
+            console.log("geolocation failed!", msg);
+        }).always(function() {
+            console.log("geolocation always!");
+        });
+}
+
+$(document).ready(init);
+
+</script>
