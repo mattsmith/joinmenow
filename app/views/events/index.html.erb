@@ -10,6 +10,8 @@
   <%= f.submit "Create your Event!" %>
 <% end %>
 
+    <input type="text" id="latitude"/>
+    <input type="text" id="longitude"/>
 
 <h1>Listing events</h1>
 
@@ -96,12 +98,13 @@ function create_map(map_div, lat, lng, zoom) {
 		mapTypeControl: false,
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-		}
+		},
+        disableDoubleClickZoom: true,
 	});
 	return map;
 }
 
-function create_circle(map, point, radius) {
+function create_circle_NOT_USED(map, point, radius) {
     var circle_opts = {
         map: map,
         center: point,
@@ -118,14 +121,31 @@ function init() {
 	var lat = 49.2825646098;    // Downtown Vancouver
 	var lng = -123.1181656402; // Downtown Vancouver
 	var zoom = 12;
+	MAP = null;
+	EVENT_MARKER = null;
 
-//    MAP = create_map(document.getElementById("map_canvas"), lat,lng,zoom);// TODO: fill with dynamic data
     MAP = create_map($("#map_canvas")[0], lat, lng, zoom);
+
+    // Position the Event
+    google.maps.event.addListener(MAP, 'dblclick', function(event) {
+        var pos = event.latLng;
+        MAP.setCenter(pos);
+        if(EVENT_MARKER) {
+            EVENT_MARKER.setMap();
+            delete EVENT_MARKER;
+        }
+    	EVENT_MARKER = new google.maps.Marker({
+    	    map: MAP,
+            icon: new google.maps.MarkerImage("/assets/1.png"),
+            position: pos,
+//            draggable: true,
+    	});
+    	$('#latitude').val(pos.lat());
+    	$('#longitude').val(pos.lng());
+    });
+
+
     var coords = null;
-    console.log("created map!");
-
-    console.log("created map!");
-
     JMN.geolocate()
         .done(function(location) {
             console.log("succesfully geolocated: ", location);
@@ -148,6 +168,7 @@ function init() {
 
 //            var circle = create_circle_marker(MAP, latlng, coords.accuracy);
             MAP.fitBounds(marker.getBounds());
+            MAP.setZoom(MAP.getZoom() - 2);
         }).fail(function(msg) {
             console.log("geolocation failed!", msg);
         }).always(function() {
