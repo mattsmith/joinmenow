@@ -1,6 +1,5 @@
 class Event < ActiveRecord::Base
   attr_accessible :fb_id, :name, :description, :start_time, :end_time
-  has_and_belongs_to_many :interests
   belongs_to :user
 
   after_create :create_facebook_event
