@@ -107,13 +107,14 @@ function search_events() {
                     title: val.name,
                 });
                 var infowindow = new google.maps.InfoWindow(
-                { content: "<h4>"+val.name+"</h4><p>"+val.description+"</p><p>start time: "+val.start_time+"<br/>end time: "+val.end_time+"</p>",
+                { content: "<h4>"+val.name+"</h4><p>"+val.description+"</p><p>start time: "
+                    +val.start_time+"<br/>end time: "+val.end_time+
+                    "</p><a class='btn' href='/events/"+val.id+"'>join</a>",
                     size: new google.maps.Size(50,50),
                 });
                 google.maps.event.addListener(marker, 'click', function() {
                    infowindow.open(MAP, marker);
                 });
-
 
                 EVENT_MARKERS.push(marker);
                 bounds.extend(pos);
@@ -159,6 +160,13 @@ function init() {
             MAP.setZoom(MAP.getZoom() - 2);
         }).fail(function(msg) {
             console.log("geolocation failed!", msg);
+            // create circle:
+            var marker_opts = {
+                icon: new google.maps.MarkerImage("/assets/blank_marker.png"),
+                position: MAP.getCenter(),
+                draggable: true,
+            };
+            USER_MARKER = JMN.add_circle_marker(MAP, marker_opts);
         }).always(function() {
             console.log("geolocation always!");
         });

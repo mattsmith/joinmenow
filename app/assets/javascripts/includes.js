@@ -5,7 +5,7 @@ JMN.DEFAULTS = {
 	zoom: 14,
 	circle_colour: "#13a9b8",  //"#fcb400"
     geolocate_max_radius : 5000,    // 5000m - enough for a city
-    geolocate_timeout : 8000,
+    geolocate_timeout : 4000,
     geolocate_options: {
         enableHighAccuracy: true,
         timeout: 4000, // in milliseconds
