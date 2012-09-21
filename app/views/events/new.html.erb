@@ -1,24 +1,71 @@
-<%= form_for Event.new do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :description %>
-  <%= f.text_field :description %>
-  <%= f.label :start_time %>
-  <%= f.datetime_select :start_time %>
-  <%= f.label :end_time %>
-  <%= f.datetime_select :end_time, default: 3.hours.from_now %>
-  <%= f.label :lat %>
-  <%= f.text_field :lat %>
-  <%= f.label :lon %>
-  <%= f.text_field :lon %>
-  <%= f.submit "Create your Event!" %>
-<% end %>
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#"><img src="/assets/img/logo.png" width="190" height="50"></a>
+          <div class="nav-collapse collapse">
+            <!--<ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+              
+            </ul>-->
+            <form class="navbar-form pull-right">
+            Your location: Vancouver
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+  
 
-    <input type="text" id="latitude"/>
-    <input type="text" id="longitude"/>
+    <div class="container">
 
-<div id="map_canvas" style="width:400px;height:300px;">
-</div>
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="row">
+        <div class="span10">
+          <h2>Create New Event</h2>
+          <p>Enter some details and get runnin'! </p>
+          
+          <%= form_for Event.new do |f| %>
+            <%= f.label :name, "Event Name" %>
+            <%= f.text_field :name, placeholder: "What sport?" %>
+            <%= f.label :description %>
+            <%= f.text_area :description, size: "3x3" %>
+            <%= f.label :start_time %>
+            <%= f.datetime_select :start_time %>
+            <%= f.label :end_time %>
+            <%= f.datetime_select :end_time, default: 3.hours.from_now %>
+            
+            <label>Where?</label>
+            <div id="map_canvas" style="width:400px;height:300px;">
+            </div>
+            
+            <%= f.hidden_field :lat %>
+            <%= f.hidden_field :lon %>
+            <%= f.submit "Get others to join you now!", class: "btn btn-primary btn-large" %>
+          <% end %>
+
+
+</p>
+
+        
+       </div>
+      </div>
+
+    
+
+      <hr>
+
+      <footer>
+        <p>&copy; JoinMeNow 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
 
 <script>
 function create_map(map_div, lat, lng, zoom) {
