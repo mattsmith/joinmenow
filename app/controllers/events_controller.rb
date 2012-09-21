@@ -1,6 +1,16 @@
 class EventsController < ApplicationController
   before_filter :authenticate_user!
 
+  def search
+    # params[:lat]
+    # params[:lon]
+    @events = Event.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @events }
+    end
+  end
+
   # GET /events
   # GET /events.json
   def index
